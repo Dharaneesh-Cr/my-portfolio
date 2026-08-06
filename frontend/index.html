@@ -227,19 +227,19 @@
                 </div>
         </div>
         <div class="col-md-6 justify-content-end" style="max-width: 500px;">
-            <form method="post" class="p-4 border rounded shadow-sm bg-light mx-4">
+            <form id="contact-form" method="post" class="p-4 border rounded shadow-sm bg-light mx-4">
                 <h3 class="fw-bold mb-3">For Enquiry</h3>
                 <div class="mb-4">
                     <label class="form-label">Full Name</label>
-                    <input type="text" name="name" class="form-control" placeholder="Albert Einstin" required>
+                    <input id="name" type="text" name="name" class="form-control" placeholder="Albert Einstin" required>
                 </div>
                 <div class="mb-4">
                     <label class="form-label">Email</label>
-                    <input type="text" name="name" class="form-control" placeholder="albert1406@gamil.com" required>
+                    <input id="email" type="text" name="name" class="form-control" placeholder="albert1406@gamil.com" required>
                 </div>
                 <div class="mb-4">
                     <label class="form-label">Message</label>
-                    <textarea name="message" class="form-control" rows="4" placeholder="Open to suggestions and queries" required></textarea>
+                    <textarea id="message" name="message" class="form-control" rows="4" placeholder="Open to suggestions and queries" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Send Message</button>
             </form>
@@ -248,6 +248,43 @@
 </section>
         
     <script>
+    const form=document.getElementById("contact-form");
+
+    form.addEventListener("submit",async function (e) {
+        e.preventDefault();
+
+        const name=document.getElementById("name").value;
+        const email=document.getElementById("email").value;
+        const message=document.getElementById("message").value;
+
+        console.log({
+            name,
+            email,
+            message
+        });
+
+        try{
+            const response=await fetch("http://localhost:5000/api/contact",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    name,
+                    email,
+                    message
+                })
+            });
+            const data=await response.json();
+            alert(data.message);
+            form.reset();
+        }catch(error){
+            console.error(error);
+            alert("Something went wrong");
+        }
+    });
+
+
     const title_element=document.getElementById("title");
     const text="Hi, I'm Dharaneesh";
     let index=0;
